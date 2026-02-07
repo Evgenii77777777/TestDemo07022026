@@ -1,0 +1,30 @@
+Установите PostgreSQL и создайте базу данных:
+
+sql
+CREATE DATABASE clean_service_db;
+Создайте 4 файла в одной папке:
+
+server.js
+
+database.sql
+
+client.js
+
+start.bat
+
+Запустите скрипт:
+
+bash
+start.bat
+Запустите сервер в первом терминале:
+
+bash
+node server.js
+Создайте HTML файл из клиента:
+
+bash
+node client.js
+Откройте браузер:
+
+text
+http://localhost:5000
