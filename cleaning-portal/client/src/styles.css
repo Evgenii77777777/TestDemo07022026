@@ -60,6 +60,21 @@ body {
   50% { transform: translateY(-10px); }
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Основные стили */
 header {
   background: var(--white);
@@ -430,58 +445,58 @@ nav span {
   text-decoration: underline;
 }
 
-/* Orders Page */
-.orders-page, .admin-page {
-  max-width: 1100px;
-  margin: 3rem auto;
-  padding: 0 1rem;
-  animation: fadeIn 0.8s ease-out;
+/* Orders Page Header */
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeIn 0.6s ease-out;
 }
 
-.btn-primary {
-  padding: 1rem 2rem;
+.page-subtitle {
+  color: var(--gray);
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+}
+
+/* Кнопка создания заявки */
+.btn-create-order {
   background: var(--gradient-primary);
   color: var(--white);
   border: none;
   border-radius: var(--radius);
+  padding: 1.2rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
   transition: var(--transition);
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 10px;
+  margin: 2rem auto 3rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(52, 152, 219, 0.3);
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-  animation: pulse 1s infinite;
+.btn-create-order:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 40px rgba(52, 152, 219, 0.4);
+  animation: pulse 2s infinite;
 }
 
-.btn-primary::before {
-  content: '+';
-  font-size: 1.2rem;
+.btn-icon {
+  background: rgba(255, 255, 255, 0.2);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
 }
 
-.btn-secondary {
-  padding: 1rem 2rem;
-  background: var(--light);
-  color: var(--dark);
-  border: 2px solid var(--gray-light);
-  border-radius: var(--radius);
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: var(--transition);
-}
-
-.btn-secondary:hover {
-  background: var(--gray-light);
-  transform: translateY(-2px);
-}
-
-/* Modal */
+/* Модальное окно создания заявки - с прокруткой всего окна */
 .modal {
   position: fixed;
   top: 0;
@@ -491,56 +506,520 @@ nav span {
   background: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   z-index: 2000;
-  padding: 1rem;
   backdrop-filter: blur(5px);
   animation: fadeIn 0.3s ease-out;
+  overflow-y: auto;
+  padding: 20px;
 }
 
-.modal-content {
+.order-form-modal {
   background: var(--white);
-  padding: 2.5rem;
   border-radius: var(--radius);
   width: 100%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  animation: float 3s ease-in-out infinite;
+  max-width: 600px;
+  margin: auto;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease-out;
+  display: flex;
+  flex-direction: column;
+
 }
 
-.modal-content h3 {
-  margin-bottom: 1.5rem;
-  color: var(--dark);
+/* Заголовок модального окна */
+.modal-header {
+  background: var(--gradient-primary);
+  color: var(--white);
+  padding: 1.5rem 2rem;
+  position: relative;
+  flex-shrink: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.modal-header h3 {
+  color: var(--white);
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: var(--white);
   font-size: 1.8rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  transition: var(--transition);
+  line-height: 1;
+  padding: 0;
 }
 
-.modal-content h3::before {
-  content: '📋';
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
 }
 
+/* Прогресс бар */
+.form-progress {
+  padding: 1.2rem 2rem;
+  background: var(--light);
+  position: relative;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  transition: width 0.5s ease;
+  border-radius: var(--radius) 0 0 0;
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  flex: 1;
+}
+
+.step-number {
+  width: 36px;
+  height: 36px;
+  background: var(--white);
+  border: 2px solid var(--gray-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--gray);
+  transition: var(--transition);
+  z-index: 2;
+}
+
+.step.active .step-number {
+  background: var(--gradient-primary);
+  border-color: var(--primary);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.step-label {
+  font-size: 0.9rem;
+  color: var(--gray);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.step.active .step-label {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Основное содержимое формы */
+.order-form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}
+
+.form-step {
+  display: none;
+  animation: fadeIn 0.4s ease-out;
+  flex-direction: column;
+}
+
+.form-step.active {
+  display: flex;
+}
+
+.step-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.step-header h4 {
+  color: var(--dark);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.step-header p {
+  color: var(--gray);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Группы формы - компактные */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+  color: var(--dark);
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.9rem;
+  border: 2px solid var(--gray-light);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: var(--transition);
+  font-family: inherit;
+  background: var(--white);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  outline: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+  max-height: 150px;
+}
+
+/* Группировка полей в строку */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Опции услуг - компактные */
+.service-options {
+  display: grid;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.service-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 2px solid var(--gray-light);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.service-option:hover {
+  border-color: var(--primary);
+  transform: translateX(3px);
+}
+
+.service-option.selected {
+  border-color: var(--primary);
+  background: rgba(52, 152, 219, 0.05);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.1);
+}
+
+.service-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  width: 40px;
+  text-align: center;
+}
+
+.service-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.service-info h5 {
+  color: var(--dark);
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.service-info p {
+  color: var(--gray);
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.service-check {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--gray-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.service-option.selected .service-check {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.checkmark {
+  width: 10px;
+  height: 10px;
+  background: var(--white);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+  transition: var(--transition);
+}
+
+.service-option.selected .checkmark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Сводка заявки */
+.order-summary {
+  margin-bottom: 1.5rem;
+}
+
+.summary-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f8ff 100%);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 2px solid var(--light);
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--light);
+}
+
+.summary-header h5 {
+  color: var(--dark);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.price-estimate {
+  background: var(--gradient-primary);
+  color: var(--white);
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.summary-details {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.detail-item {
+  display: flex;
+  gap: 0.8rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px dashed var(--gray-light);
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: var(--dark);
+  min-width: 100px;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+
+.detail-value {
+  color: var(--dark);
+  flex: 1;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.payment-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.payment-option {
+  padding: 0.8rem;
+  border: 2px solid var(--gray-light);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+  font-size: 0.9rem;
+}
+
+.payment-option:hover {
+  border-color: var(--primary);
+}
+
+.payment-option.selected {
+  border-color: var(--primary);
+  background: rgba(52, 152, 219, 0.05);
+}
+
+.payment-option input {
+  display: none;
+}
+
+/* Кнопки формы */
 .form-actions {
   display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--light);
   gap: 1rem;
-  margin-top: 2rem;
-  justify-content: flex-end;
+  flex-shrink: 0;
 }
 
-/* Order Cards */
-.orders-list {
-  margin-top: 2rem;
+.btn-prev,
+.btn-next,
+.btn-submit {
+  padding: 0.9rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  min-height: 48px;
+}
+
+.btn-prev {
+  background: var(--light);
+  color: var(--dark);
+  flex: 1;
+  max-width: 120px;
+}
+
+.btn-next {
+  background: var(--gradient-primary);
+  color: var(--white);
+  flex: 1;
+  max-width: 120px;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, var(--secondary), var(--success));
+  color: var(--white);
+  flex: 2;
+}
+
+.btn-prev:hover,
+.btn-next:hover,
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.arrow {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.submit-icon {
+  font-size: 1.1rem;
+}
+
+/* Контейнер заявок */
+.orders-page, .admin-page {
+  max-width: 1100px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.orders-container {
+  margin-top: 3rem;
+}
+
+.orders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--light);
+}
+
+.orders-header h3 {
+  color: var(--dark);
+  margin: 0;
+}
+
+.orders-count {
+  background: var(--light);
+  color: var(--dark);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+/* Сетка заявок */
+.orders-grid {
   display: grid;
   gap: 1.5rem;
 }
 
-.order-card, .admin-order {
+.order-card {
   background: var(--white);
-  padding: 2rem;
   border-radius: var(--radius);
+  padding: 1.5rem;
   box-shadow: var(--shadow);
   transition: var(--transition);
   border-left: 4px solid var(--primary);
@@ -548,12 +1027,12 @@ nav span {
   overflow: hidden;
 }
 
-.order-card:hover, .admin-order:hover {
+.order-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-hover);
 }
 
-.order-card::before, .admin-order::before {
+.order-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -564,26 +1043,25 @@ nav span {
   transform: translate(50px, -50px) rotate(45deg);
 }
 
-.admin-order {
-  border-left-color: var(--accent);
-}
-
-.order-header {
+.order-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid var(--light);
+  align-items: flex-start;
+  margin-bottom: 1rem;
 }
 
-.order-header span:first-child {
-  font-weight: 700;
+.order-card-header h4 {
   color: var(--dark);
-  font-size: 1.1rem;
+  margin: 0 0 0.5rem 0;
 }
 
-/* Status Badges */
+.order-date {
+  color: var(--gray);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* Статус Badges */
 .status {
   padding: 0.5rem 1.2rem;
   border-radius: 20px;
@@ -614,7 +1092,52 @@ nav span {
   color: var(--white);
 }
 
+.order-status {
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.order-card-body {
+  padding-top: 1rem;
+  border-top: 1px solid var(--light);
+}
+
+.order-info {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.info-label {
+  font-weight: 600;
+  color: var(--dark);
+  margin-right: 5px;
+}
+
+.custom-service {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(52, 152, 219, 0.05);
+  border-radius: var(--radius);
+}
+
+.custom-label {
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
 /* Admin Page */
+.admin-page h2 {
+  color: var(--dark);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
 .filter-controls {
   background: var(--white);
   padding: 1.5rem;
@@ -695,43 +1218,38 @@ nav span {
   transform: translateY(0);
 }
 
-/* Utility Classes */
+/* Состояния загрузки */
 .loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px;
+  text-align: center;
+  padding: 4rem;
 }
 
-.loading::after {
-  content: '';
-  width: 40px;
-  height: 40px;
+.spinner {
+  width: 50px;
+  height: 50px;
   border: 4px solid var(--light);
   border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.empty-state {
+.empty-orders {
   text-align: center;
-  padding: 3rem;
+  padding: 4rem;
   color: var(--gray);
-  background: var(--white);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
 }
 
-.empty-state::before {
-  content: '📄';
-  font-size: 3rem;
-  display: block;
+.empty-icon {
+  font-size: 4rem;
   margin-bottom: 1rem;
+  opacity: 0.5;
   animation: float 3s ease-in-out infinite;
+}
+
+.empty-orders h4 {
+  color: var(--dark);
+  margin-bottom: 0.5rem;
 }
 
 /* Toast Notifications */
@@ -759,7 +1277,25 @@ nav span {
   border-left-color: var(--warning);
 }
 
-/* Responsive Design */
+/* Кастомный скроллбар для модального окна */
+.modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Адаптивность для мобильных */
 @media (max-width: 768px) {
   header {
     flex-direction: column;
@@ -819,1114 +1355,16 @@ nav span {
   .filter-controls select {
     width: 100%;
   }
-}
-
-@media (max-width: 480px) {
-  .auth-page, .orders-page, .admin-page {
-    padding: 1rem;
-    margin: 2rem 1rem;
-  }
   
-  .slider {
-    height: 280px;
-  }
-  
-  .modal-content {
-    padding: 1.5rem;
-  }
-  
-  .form-actions {
-    flex-direction: column;
-  }
-  
-  .hero {
-    padding: 3rem 1rem;
-  }
-  
-  .hero h1 {
-    font-size: 2rem;
-  }
-  
-  .services h2 {
-    font-size: 2rem;
-  }
-  
-  .logo {
-    font-size: 1.5rem;
-  }
-}
-
-/* Print Styles */
-@media print {
-  .modal,
-  .slider-btn,
-  .status-actions,
-  nav button,
-  .btn-primary,
-  .btn-secondary {
-    display: none !important;
-  }
-  
-  body {
-    background: white !important;
-    color: black !important;
-  }
-  
-  .order-card, .admin-order {
-    break-inside: avoid;
-    box-shadow: none !important;
-    border: 1px solid #ddd !important;
-  }
-}
-
-
-
-
-
-
-
-
-
-/* Красивый дизайн для создания заявки */
-
-.page-header {
-  text-align: center;
-  margin-bottom: 3rem;
-  animation: fadeIn 0.6s ease-out;
-}
-
-.page-subtitle {
-  color: var(--gray);
-  font-size: 1.1rem;
-  margin-top: 0.5rem;
-}
-
-/* Кнопка создания заявки */
-.btn-create-order {
-  background: var(--gradient-primary);
-  color: var(--white);
-  border: none;
-  border-radius: var(--radius);
-  padding: 1.2rem 2.5rem;
-  font-size: 1.1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin: 2rem auto 3rem;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 10px 30px rgba(52, 152, 219, 0.3);
-}
-
-.btn-create-order:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 40px rgba(52, 152, 219, 0.4);
-  animation: pulse 2s infinite;
-}
-
-.btn-icon {
-  background: rgba(255, 255, 255, 0.2);
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-}
-
-/* Модальное окно заявки */
-.order-form-modal {
-  max-width: 600px;
-  padding: 0;
-  overflow: hidden;
-}
-
-.modal-header {
-  background: var(--gradient-primary);
-  color: var(--white);
-  padding: 2rem;
-  position: relative;
-}
-
-.modal-header h3 {
-  color: var(--white);
-  margin: 0;
-  font-size: 1.8rem;
-}
-
-.close-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: var(--white);
-  font-size: 2rem;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-}
-
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: rotate(90deg);
-}
-
-/* Прогресс бар */
-.form-progress {
-  padding: 1.5rem 2rem;
-  background: var(--light);
-  position: relative;
-}
-
-.progress-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 4px;
-  background: var(--gradient-primary);
-  transition: width 0.5s ease;
-}
-
-.progress-steps {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  z-index: 1;
-}
-
-.step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  position: relative;
-  flex: 1;
-}
-
-.step-number {
-  width: 36px;
-  height: 36px;
-  background: var(--white);
-  border: 2px solid var(--gray-light);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  color: var(--gray);
-  transition: var(--transition);
-}
-
-.step.active .step-number {
-  background: var(--gradient-primary);
-  border-color: var(--primary);
-  color: var(--white);
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-}
-
-.step-label {
-  font-size: 0.9rem;
-  color: var(--gray);
-  font-weight: 500;
-}
-
-.step.active .step-label {
-  color: var(--primary);
-  font-weight: 600;
-}
-
-/* Форма заявки */
-.order-form {
-  padding: 2rem;
-}
-
-.form-step {
-  display: none;
-  animation: fadeIn 0.5s ease-out;
-}
-
-.form-step.active {
-  display: block;
-}
-
-.step-header {
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.step-header h4 {
-  color: var(--dark);
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.step-header p {
-  color: var(--gray);
-}
-
-/* Группы формы */
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-
-.form-group label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 0.8rem;
-  font-weight: 600;
-  color: var(--dark);
-}
-
-.label-icon {
-  font-size: 1.2rem;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 1rem;
-  border: 2px solid var(--gray-light);
-  border-radius: var(--radius);
-  font-size: 1rem;
-  transition: var(--transition);
-  font-family: inherit;
-  background: var(--white);
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-  outline: none;
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-/* Опции услуг */
-.service-options {
-  display: grid;
-  gap: 1rem;
-}
-
-.service-option {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.2rem;
-  border: 2px solid var(--gray-light);
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: var(--transition);
-  background: var(--white);
-}
-
-.service-option:hover {
-  border-color: var(--primary);
-  transform: translateX(5px);
-}
-
-.service-option.selected {
-  border-color: var(--primary);
-  background: rgba(52, 152, 219, 0.05);
-  box-shadow: 0 5px 20px rgba(52, 152, 219, 0.1);
-}
-
-.service-icon {
-  font-size: 2rem;
-  flex-shrink: 0;
-}
-
-.service-info {
-  flex: 1;
-}
-
-.service-info h5 {
-  color: var(--dark);
-  margin-bottom: 0.3rem;
-  font-size: 1rem;
-}
-
-.service-info p {
-  color: var(--gray);
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-.service-check {
-  width: 24px;
-  height: 24px;
-  border: 2px solid var(--gray-light);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.service-option.selected .service-check {
-  border-color: var(--primary);
-  background: var(--primary);
-}
-
-.checkmark {
-  width: 10px;
-  height: 10px;
-  background: var(--white);
-  border-radius: 50%;
-  opacity: 0;
-  transform: scale(0);
-  transition: var(--transition);
-}
-
-.service-option.selected .checkmark {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Сводка заявки */
-.order-summary {
-  margin: 2rem 0;
-}
-
-.summary-card {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f8ff 100%);
-  border-radius: var(--radius);
-  padding: 2rem;
-  border: 2px solid var(--light);
-}
-
-.summary-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid var(--light);
-}
-
-.summary-header h5 {
-  color: var(--dark);
-  font-size: 1.3rem;
-  margin: 0;
-}
-
-.price-estimate {
-  background: var(--gradient-primary);
-  color: var(--white);
-  padding: 0.5rem 1.2rem;
-  border-radius: 20px;
-  font-weight: 700;
-  font-size: 1.1rem;
-}
-
-.summary-details {
-  display: grid;
-  gap: 1rem;
-}
-
-.detail-item {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-}
-
-.detail-label {
-  font-weight: 600;
-  color: var(--dark);
-  min-width: 120px;
-  flex-shrink: 0;
-}
-
-.detail-value {
-  color: var(--dark);
-  flex: 1;
-}
-
-.payment-options {
-  display: flex;
-  gap: 1rem;
-  flex: 1;
-}
-
-.payment-option {
-  flex: 1;
-  padding: 1rem;
-  border: 2px solid var(--gray-light);
-  border-radius: var(--radius);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: var(--transition);
-}
-
-.payment-option.selected {
-  border-color: var(--primary);
-  background: rgba(52, 152, 219, 0.05);
-}
-
-.payment-option input {
-  display: none;
-}
-
-.summary-footer {
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 2px solid var(--light);
-}
-
-.disclaimer {
-  color: var(--gray);
-  font-size: 0.9rem;
-  line-height: 1.5;
-  padding: 1rem;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: var(--radius);
-  margin: 0;
-}
-
-/* Кнопки формы */
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
-  gap: 1rem;
-}
-
-.btn-prev,
-.btn-next,
-.btn-submit {
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: var(--radius);
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1rem;
-}
-
-.btn-prev {
-  background: var(--light);
-  color: var(--dark);
-}
-
-.btn-next {
-  background: var(--gradient-primary);
-  color: var(--white);
-}
-
-.btn-submit {
-  background: linear-gradient(135deg, var(--secondary), var(--success));
-  color: var(--white);
-  padding: 1rem 2.5rem;
-}
-
-.btn-prev:hover,
-.btn-next:hover,
-.btn-submit:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
-}
-
-.arrow {
-  font-weight: 700;
-  font-size: 1.2rem;
-}
-
-.submit-icon {
-  font-size: 1.2rem;
-}
-
-/* Контейнер заявок */
-.orders-container {
-  margin-top: 3rem;
-}
-
-.orders-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid var(--light);
-}
-
-.orders-header h3 {
-  color: var(--dark);
-  margin: 0;
-}
-
-.orders-count {
-  background: var(--light);
-  color: var(--dark);
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-weight: 600;
-}
-
-/* Сетка заявок */
-.orders-grid {
-  display: grid;
-  gap: 1.5rem;
-}
-
-.order-card {
-  background: var(--white);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  box-shadow: var(--shadow);
-  transition: var(--transition);
-  border-left: 4px solid var(--primary);
-  position: relative;
-  overflow: hidden;
-}
-
-.order-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-hover);
-}
-
-.order-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 100px;
-  height: 100px;
-  background: linear-gradient(45deg, transparent 50%, rgba(52, 152, 219, 0.05) 50%);
-  transform: translate(50px, -50px) rotate(45deg);
-}
-
-.order-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-}
-
-.order-card-header h4 {
-  color: var(--dark);
-  margin: 0 0 0.5rem 0;
-}
-
-.order-date {
-  color: var(--gray);
-  font-size: 0.9rem;
-  margin: 0;
-}
-
-.order-status {
-  padding: 0.5rem 1.2rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.order-card-body {
-  padding-top: 1rem;
-  border-top: 1px solid var(--light);
-}
-
-.order-info {
-  display: grid;
-  gap: 0.5rem;
-}
-
-.info-label {
-  font-weight: 600;
-  color: var(--dark);
-  margin-right: 5px;
-}
-
-.custom-service {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: rgba(52, 152, 219, 0.05);
-  border-radius: var(--radius);
-}
-
-.custom-label {
-  font-weight: 600;
-  color: var(--primary);
-  margin-bottom: 0.5rem;
-}
-
-/* Состояния загрузки и пустые состояния */
-.loading {
-  text-align: center;
-  padding: 4rem;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid var(--light);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 1rem;
-}
-
-.empty-orders {
-  text-align: center;
-  padding: 4rem;
-  color: var(--gray);
-}
-
-.empty-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
-  animation: float 3s ease-in-out infinite;
-}
-
-.empty-orders h4 {
-  color: var(--dark);
-  margin-bottom: 0.5rem;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  
-  .payment-options {
-    flex-direction: column;
-  }
-  
-  .service-option {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-  }
-  
-  .order-form-modal {
-    margin: 1rem;
-  }
-  
-  .detail-item {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .detail-label {
-    min-width: auto;
-  }
-  
-  .form-actions {
-    flex-direction: column;
-  }
-  
-  .btn-prev,
-  .btn-next,
-  .btn-submit {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .progress-steps {
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-  
-  .step {
-    flex: none;
-    width: calc(33.333% - 1rem);
-  }
-}
-
-@media (max-width: 480px) {
-  .order-form {
-    padding: 1.5rem;
-  }
-  
-  .modal-header {
-    padding: 1.5rem;
-  }
-  
-  .form-progress {
-    padding: 1rem;
-  }
-  
-  .step-label {
-    font-size: 0.8rem;
-  }
-  
-  .orders-header {
-    flex-direction: column;
-    gap: 1rem;
+  /* Модальное окно на мобильных */
+  .modal {
+    padding: 10px;
     align-items: flex-start;
   }
-}
-
-
-
-
-
-
-
-/* Модальное окно создания заявки - Исправленная версия */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  backdrop-filter: blur(5px);
-  animation: fadeIn 0.3s ease-out;
-  padding: 1rem;
-  overflow: hidden;
-}
-
-.order-form-modal {
-  background: var(--white);
-  border-radius: var(--radius);
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-  animation: slideUp 0.4s ease-out;
-  overflow: hidden;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(50px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.modal-header {
-  background: var(--gradient-primary);
-  color: var(--white);
-  padding: 1.5rem 2rem;
-  position: relative;
-  flex-shrink: 0;
-}
-
-.modal-header h3 {
-  color: var(--white);
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-.close-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: var(--white);
-  font-size: 1.8rem;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: var(--transition);
-  line-height: 1;
-  padding: 0;
-}
-
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: rotate(90deg);
-}
-
-/* Контейнер формы с прокруткой содержимого */
-.form-content-container {
-  flex: 1;
-  overflow-y: auto;
-  max-height: calc(90vh - 140px); /* Высота минус заголовок и прогресс-бар */
-}
-
-.form-progress {
-  padding: 1.2rem 2rem;
-  background: var(--light);
-  position: relative;
-  flex-shrink: 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-/* Контент формы */
-.order-form {
-  padding: 2rem;
-  min-height: 400px;
-  display: flex;
-  flex-direction: column;
-}
-
-.form-step {
-  display: none;
-  animation: fadeIn 0.4s ease-out;
-  flex: 1;
-}
-
-.form-step.active {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Адаптивные стили для формы */
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.2rem;
-}
-
-/* Опции услуг - исправленная версия */
-.service-options {
-  display: grid;
-  gap: 0.8rem;
-  max-height: 300px;
-  overflow-y: auto;
-  padding-right: 5px;
-}
-
-.service-options::-webkit-scrollbar {
-  width: 6px;
-}
-
-.service-options::-webkit-scrollbar-track {
-  background: var(--light);
-  border-radius: 3px;
-}
-
-.service-options::-webkit-scrollbar-thumb {
-  background: var(--gray-light);
-  border-radius: 3px;
-}
-
-.service-options::-webkit-scrollbar-thumb:hover {
-  background: var(--gray);
-}
-
-.service-option {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  border: 2px solid var(--gray-light);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: var(--transition);
-  background: var(--white);
-  min-height: 70px;
-}
-
-.service-option:hover {
-  border-color: var(--primary);
-  transform: translateX(3px);
-}
-
-.service-option.selected {
-  border-color: var(--primary);
-  background: rgba(52, 152, 219, 0.05);
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.1);
-}
-
-.service-icon {
-  font-size: 1.8rem;
-  flex-shrink: 0;
-  width: 40px;
-  text-align: center;
-}
-
-.service-info {
-  flex: 1;
-  min-width: 0; /* Для правильного обрезания текста */
-}
-
-.service-info h5 {
-  color: var(--dark);
-  margin-bottom: 0.3rem;
-  font-size: 1rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.service-info p {
-  color: var(--gray);
-  font-size: 0.85rem;
-  margin: 0;
-  line-height: 1.3;
-}
-
-/* Сводка заявки - компактная версия */
-.order-summary {
-  margin: 1rem 0;
-  flex: 1;
-  overflow-y: auto;
-}
-
-.summary-card {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f8ff 100%);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  border: 2px solid var(--light);
-  max-height: 350px;
-  overflow-y: auto;
-}
-
-.summary-details {
-  display: grid;
-  gap: 0.8rem;
-}
-
-.detail-item {
-  display: flex;
-  gap: 0.8rem;
-  align-items: flex-start;
-  padding: 0.8rem 0;
-  border-bottom: 1px dashed var(--gray-light);
-}
-
-.detail-item:last-child {
-  border-bottom: none;
-}
-
-.detail-label {
-  font-weight: 600;
-  color: var(--dark);
-  min-width: 100px;
-  flex-shrink: 0;
-  font-size: 0.9rem;
-}
-
-.detail-value {
-  color: var(--dark);
-  flex: 1;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-.payment-options {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.8rem;
-  margin-top: 0.5rem;
-}
-
-.payment-option {
-  padding: 0.8rem;
-  border: 2px solid var(--gray-light);
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: var(--transition);
-  font-size: 0.9rem;
-}
-
-.payment-option.selected {
-  border-color: var(--primary);
-  background: rgba(52, 152, 219, 0.05);
-}
-
-/* Кнопки формы - фиксированные внизу */
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: auto;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--light);
-  gap: 1rem;
-  flex-shrink: 0;
-}
-
-.btn-prev,
-.btn-next,
-.btn-submit {
-  padding: 0.9rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--transition);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 0.95rem;
-  flex: 1;
-  min-height: 48px;
-}
-
-.btn-prev {
-  background: var(--light);
-  color: var(--dark);
-  max-width: 120px;
-}
-
-.btn-next {
-  background: var(--gradient-primary);
-  color: var(--white);
-  max-width: 120px;
-}
-
-.btn-submit {
-  background: linear-gradient(135deg, var(--secondary), var(--success));
-  color: var(--white);
-  flex: 2;
-}
-
-/* Адаптивность для мобильных */
-@media (max-width: 768px) {
+  
   .order-form-modal {
     max-height: 95vh;
-    margin: 0.5rem;
-  }
-  
-  .form-content-container {
-    max-height: calc(95vh - 130px);
+    margin: 0;
   }
   
   .modal-header {
@@ -2013,19 +1451,52 @@ nav span {
 }
 
 @media (max-width: 480px) {
-  .order-form-modal {
-    max-height: 100vh;
-    height: 100vh;
-    margin: 0;
-    border-radius: 0;
+  .auth-page, .orders-page, .admin-page {
+    padding: 1rem;
+    margin: 2rem 1rem;
   }
   
-  .form-content-container {
-    max-height: calc(100vh - 120px);
+  .slider {
+    height: 280px;
+  }
+  
+  .modal-content {
+    padding: 1.5rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .hero {
+    padding: 3rem 1rem;
+  }
+  
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .services h2 {
+    font-size: 2rem;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+  }
+  
+  /* Модальное окно на очень маленьких экранах */
+  .modal {
+    padding: 5px;
+  }
+  
+  .order-form-modal {
+    max-height: 100vh;
+    border-radius: 0;
   }
   
   .modal-header {
     padding: 1rem;
+    border-radius: 0;
   }
   
   .modal-header h3 {
@@ -2059,14 +1530,15 @@ nav span {
   }
 }
 
-/* Для очень маленьких экранов */
+/* Для очень маленьких экранов по высоте */
 @media (max-height: 600px) {
-  .order-form-modal {
-    max-height: 100vh;
+  .modal {
+    align-items: flex-start;
   }
   
-  .form-content-container {
-    max-height: calc(100vh - 110px);
+  .order-form-modal {
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   
   .service-options {
@@ -2076,38 +1548,27 @@ nav span {
   .summary-card {
     max-height: 250px;
   }
-  
-  .order-form {
-    padding: 1rem;
+}
+
+/* Print Styles */
+@media print {
+  .modal,
+  .slider-btn,
+  .status-actions,
+  nav button,
+  .btn-primary,
+  .btn-secondary {
+    display: none !important;
   }
   
-  .form-group {
-    margin-bottom: 1rem;
+  body {
+    background: white !important;
+    color: black !important;
   }
-}
-
-/* Улучшенная прокрутка для всех браузеров */
-.form-content-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.form-content-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.form-content-container::-webkit-scrollbar-thumb {
-  background: var(--gray-light);
-  border-radius: 4px;
-}
-
-.form-content-container::-webkit-scrollbar-thumb:hover {
-  background: var(--gray);
-}
-
-/* Убираем стандартное поведение прокрутки на телефонах */
-@media (hover: none) and (pointer: coarse) {
-  .service-options,
-  .summary-card {
-    -webkit-overflow-scrolling: touch;
+  
+  .order-card, .admin-order {
+    break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
   }
 }

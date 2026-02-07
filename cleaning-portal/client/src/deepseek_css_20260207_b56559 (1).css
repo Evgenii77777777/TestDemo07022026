@@ -1,0 +1,661 @@
+/* Модальное окно создания заявки - с прокруткой всего окна */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Изменено с center на flex-start */
+  z-index: 2000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease-out;
+  overflow-y: auto; /* Добавлена прокрутка всего модального окна */
+  padding: 20px; /* Отступы по краям */
+}
+
+.order-form-modal {
+  background: var(--white);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 600px;
+  margin: auto; /* Центрирование по вертикали */
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease-out;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh; /* Ограничение максимальной высоты */
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Заголовок модального окна */
+.modal-header {
+  background: var(--gradient-primary);
+  color: var(--white);
+  padding: 1.5rem 2rem;
+  position: relative;
+  flex-shrink: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.modal-header h3 {
+  color: var(--white);
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: var(--white);
+  font-size: 1.8rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  line-height: 1;
+  padding: 0;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+/* Прогресс бар */
+.form-progress {
+  padding: 1.2rem 2rem;
+  background: var(--light);
+  position: relative;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: var(--gradient-primary);
+  transition: width 0.5s ease;
+  border-radius: var(--radius) 0 0 0;
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  flex: 1;
+}
+
+.step-number {
+  width: 36px;
+  height: 36px;
+  background: var(--white);
+  border: 2px solid var(--gray-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--gray);
+  transition: var(--transition);
+  z-index: 2;
+}
+
+.step.active .step-number {
+  background: var(--gradient-primary);
+  border-color: var(--primary);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+}
+
+.step-label {
+  font-size: 0.9rem;
+  color: var(--gray);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.step.active .step-label {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* Основное содержимое формы */
+.order-form {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px; /* Минимальная высота */
+}
+
+.form-step {
+  display: none;
+  animation: fadeIn 0.4s ease-out;
+  flex-direction: column;
+}
+
+.form-step.active {
+  display: flex;
+}
+
+.step-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.step-header h4 {
+  color: var(--dark);
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.step-header p {
+  color: var(--gray);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Группы формы - компактные */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+  color: var(--dark);
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.9rem;
+  border: 2px solid var(--gray-light);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: var(--transition);
+  font-family: inherit;
+  background: var(--white);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  outline: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+  max-height: 150px;
+}
+
+/* Группировка полей в строку */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Опции услуг - компактные */
+.service-options {
+  display: grid;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.service-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 2px solid var(--gray-light);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.service-option:hover {
+  border-color: var(--primary);
+  transform: translateX(3px);
+}
+
+.service-option.selected {
+  border-color: var(--primary);
+  background: rgba(52, 152, 219, 0.05);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.1);
+}
+
+.service-icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  width: 40px;
+  text-align: center;
+}
+
+.service-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.service-info h5 {
+  color: var(--dark);
+  margin-bottom: 0.3rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.service-info p {
+  color: var(--gray);
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.service-check {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--gray-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.service-option.selected .service-check {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+
+.checkmark {
+  width: 10px;
+  height: 10px;
+  background: var(--white);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+  transition: var(--transition);
+}
+
+.service-option.selected .checkmark {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Сводка заявки */
+.order-summary {
+  margin-bottom: 1.5rem;
+}
+
+.summary-card {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f8ff 100%);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 2px solid var(--light);
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--light);
+}
+
+.summary-header h5 {
+  color: var(--dark);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.price-estimate {
+  background: var(--gradient-primary);
+  color: var(--white);
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.summary-details {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.detail-item {
+  display: flex;
+  gap: 0.8rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px dashed var(--gray-light);
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: var(--dark);
+  min-width: 100px;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+}
+
+.detail-value {
+  color: var(--dark);
+  flex: 1;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.payment-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.payment-option {
+  padding: 0.8rem;
+  border: 2px solid var(--gray-light);
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition);
+  font-size: 0.9rem;
+}
+
+.payment-option:hover {
+  border-color: var(--primary);
+}
+
+.payment-option.selected {
+  border-color: var(--primary);
+  background: rgba(52, 152, 219, 0.05);
+}
+
+.payment-option input {
+  display: none;
+}
+
+/* Кнопки формы */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--light);
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.btn-prev,
+.btn-next,
+.btn-submit {
+  padding: 0.9rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  min-height: 48px;
+}
+
+.btn-prev {
+  background: var(--light);
+  color: var(--dark);
+  flex: 1;
+  max-width: 120px;
+}
+
+.btn-next {
+  background: var(--gradient-primary);
+  color: var(--white);
+  flex: 1;
+  max-width: 120px;
+}
+
+.btn-submit {
+  background: linear-gradient(135deg, var(--secondary), var(--success));
+  color: var(--white);
+  flex: 2;
+}
+
+.btn-prev:hover,
+.btn-next:hover,
+.btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.arrow {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.submit-icon {
+  font-size: 1.1rem;
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .modal {
+    padding: 10px;
+    align-items: flex-start;
+  }
+  
+  .order-form-modal {
+    max-height: 95vh;
+    margin: 0;
+  }
+  
+  .modal-header {
+    padding: 1.2rem 1.5rem;
+  }
+  
+  .modal-header h3 {
+    font-size: 1.3rem;
+    padding-right: 2rem;
+  }
+  
+  .form-progress {
+    padding: 1rem;
+  }
+  
+  .step-label {
+    font-size: 0.8rem;
+  }
+  
+  .order-form {
+    padding: 1.5rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .payment-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .detail-item {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  
+  .detail-label {
+    min-width: auto;
+    font-size: 0.85rem;
+  }
+  
+  .detail-value {
+    font-size: 0.85rem;
+  }
+  
+  .service-option {
+    padding: 0.8rem;
+    gap: 0.8rem;
+  }
+  
+  .service-icon {
+    font-size: 1.5rem;
+    width: 30px;
+  }
+  
+  .service-info h5 {
+    font-size: 0.9rem;
+  }
+  
+  .service-info p {
+    font-size: 0.8rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  
+  .btn-prev,
+  .btn-next,
+  .btn-submit {
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .close-btn {
+    top: 0.8rem;
+    right: 1rem;
+    width: 32px;
+    height: 32px;
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal {
+    padding: 5px;
+  }
+  
+  .order-form-modal {
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  .modal-header {
+    padding: 1rem;
+    border-radius: 0;
+  }
+  
+  .modal-header h3 {
+    font-size: 1.2rem;
+  }
+  
+  .order-form {
+    padding: 1rem;
+  }
+  
+  .form-progress {
+    padding: 0.8rem;
+  }
+  
+  .progress-steps {
+    gap: 0.5rem;
+  }
+  
+  .step-number {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+  }
+  
+  .step-label {
+    font-size: 0.75rem;
+  }
+  
+  .summary-card {
+    padding: 1rem;
+  }
+}
+
+/* Для очень маленьких экранов */
+@media (max-height: 600px) {
+  .modal {
+    align-items: flex-start;
+  }
+  
+  .order-form-modal {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+/* Кастомный скроллбар для модального окна */
+.modal::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.modal::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
