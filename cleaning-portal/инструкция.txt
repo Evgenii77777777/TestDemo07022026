@@ -1,0 +1,10 @@
+Установить зависимости
+npm run install-all
+
+Настроить базу данных PostgreSQL
+-- Создайте базу данных 'cleaning_service'
+-- Затем выполните SQL из файла server/server.js (раздел initDB)
+
+
+Запустить приложение
+npm run dev
