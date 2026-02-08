@@ -9,7 +9,12 @@ app.use(express.json());
 
 // Подключение к PostgreSQL с упрощенными настройками для Windows
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:1@localhost:5432/cleaning_service',
+
+  user: 'postgres',           // стандартный пользователь
+  host: 'localhost',          // локальный сервер
+  database: 'cleaning_service', // имя базы данных
+  password: '1',              // ваш пароль
+  port: 5432,                 // стандартный порт PostgreSQL
 });
 
 // Простой тест соединения
