@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
-//import Logo from './components/logo';
-//import ImageSlider from './components/ImageSlider';
-
 
 import HomePage from './components/HomePage';
 import RegisterPage from './components/RegisterPage';
 import LoginPage from './components/LoginPage';
 import OrdersPage from './components/OrdersPage';
 import AdminPage from './components/AdminPage';
-
-
 
 
 // Главный компонент приложения
