@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link  } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 
 // API клиент
@@ -20,10 +20,6 @@ const api = {
     body: JSON.stringify(data)
   }).then(res => res.json())
 };
-
-
-
-
 
 
 // Панель администратора

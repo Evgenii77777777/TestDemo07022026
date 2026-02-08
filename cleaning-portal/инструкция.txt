@@ -8,3 +8,4 @@ npm run install-all
 
 Запустить приложение
 npm run dev
+

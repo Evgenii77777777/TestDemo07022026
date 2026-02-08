@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 
 // API клиент
@@ -20,6 +20,20 @@ const api = {
     body: JSON.stringify(data)
   }).then(res => res.json())
 };
+
+
+// Простая функция для преобразования даты из формата 2026-02-07T20:00:00.000Z
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    
+    // Избавляемся от времени, берем только дату
+    const datePart = dateString.split('T')[0]; // Получаем "2026-02-07"
+    const [year, month, day] = datePart.split('-');
+    
+    // Преобразуем в русский формат
+    return `${day}.${month}.${year}`;
+  };
+
 
 
 // Создание заявки пользователя
@@ -475,7 +489,7 @@ const OrdersPage = () => {
                   <div className="order-info">
                     <p><span className="info-label">📍 Адрес:</span> {order.address}</p>
                     <p><span className="info-label">✨ Услуга:</span> {order.service_type}</p>
-                    <p><span className="info-label">📅 Дата:</span> {order.service_date} в {order.service_time}</p>
+                    <p><span className="info-label">📅 Дата:</span> {formatDate(order.service_date)} в {order.service_time}</p>
                     <p><span className="info-label">💳 Оплата:</span> {order.payment_type}</p>
                   </div>
                   

@@ -11,41 +11,6 @@ import OrdersPage from './components/OrdersPage';
 import AdminPage from './components/AdminPage';
 
 
-// API клиент
-const api = {
-  register: (data) => fetch('/api/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(res => res.json()),
-
-  login: (data) => fetch('/api/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(res => res.json()),
-
-  createOrder: (data) => fetch('/api/orders', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(res => res.json()),
-
-  getUserOrders: (userId) => fetch(`/api/orders/${userId}`).then(res => res.json()),
-
-  getAdminOrders: () => fetch('/api/admin/orders').then(res => res.json()),
-
-  updateOrderStatus: (id, data) => fetch(`/api/admin/orders/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  }).then(res => res.json())
-};
-
-
-
-
-
 
 
 // Главный компонент приложения
