@@ -105,6 +105,19 @@ header {
 .logo::before {
   content: "✨";
   font-size: 1.8rem;
+   /*
+
+  width: 180px;
+  height: 50px;
+  background-image: url('./images/logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+
+
+*/
+
+
+ 
 }
 
 nav {
@@ -1480,10 +1493,6 @@ nav span {
     font-size: 2rem;
   }
   
-  .logo {
-    font-size: 1.5rem;
-  }
-  
   /* Модальное окно на очень маленьких экранах */
   .modal {
     padding: 5px;
@@ -1571,4 +1580,504 @@ nav span {
     box-shadow: none !important;
     border: 1px solid #ddd !important;
   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Стили для логотипа с изображением */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
+  transition: var(--transition);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.logo:hover .logo-image {
+  transform: scale(1.05);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.logo-text {
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+/* Альтернативный вариант для компонента Logo */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.logo-img {
+  height: auto;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.logo-img:hover {
+  transform: rotate(-5deg) scale(1.1);
+}
+
+/* Адаптивность логотипа */
+@media (max-width: 768px) {
+  .logo-image {
+    height: 32px;
+  }
+  
+  .logo-text {
+    font-size: 1.4rem;
+  }
+  
+  .logo {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-image {
+    height: 28px;
+  }
+  
+  .logo-text {
+    font-size: 1.2rem;
+  }
+  
+  /* Скрыть текст на очень маленьких экранах */
+  .logo.compact .logo-text {
+    display: none;
+  }
+  
+  /* Показать только иконку */
+  .logo.compact .logo-image {
+    height: 36px;
+    width: 36px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== СТИЛИ ДЛЯ КНОПКИ "НА ГЛАВНУЮ" ===== */
+
+/* Шапка страницы с навигацией */
+.page-header-with-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  padding: 1.5rem;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.6s ease-out;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.header-left,
+.header-center,
+.header-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.header-left {
+  justify-content: flex-start;
+}
+
+.header-center {
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.header-right {
+  justify-content: flex-end;
+}
+
+/* Основная кнопка "На главную" */
+.btn-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.8rem 1.5rem;
+  background: var(--gradient-primary);
+  color: var(--white);
+  text-decoration: none;
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 1rem;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+}
+
+.btn-home:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+  background: linear-gradient(135deg, var(--primary-dark), var(--accent-dark));
+}
+
+.btn-home:active {
+  transform: translateY(0);
+}
+
+.home-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.btn-home:hover .home-icon {
+  transform: scale(1.2);
+}
+
+/* Кнопка для страниц авторизации */
+.btn-home-small {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.6rem 1rem;
+  background: var(--light);
+  color: var(--dark);
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: var(--transition);
+  border: 1px solid var(--gray-light);
+  margin-bottom: 1.5rem;
+}
+
+.btn-home-small:hover {
+  background: var(--primary);
+  color: var(--white);
+  border-color: var(--primary);
+  transform: translateX(-3px);
+}
+
+/* Заголовок на страницах авторизации */
+.auth-header {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.auth-header h2 {
+  text-align: center;
+  margin: 0;
+}
+
+/* Приветствие пользователя */
+.user-greeting {
+  padding: 0.8rem 1.2rem;
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.1));
+  color: var(--dark);
+  border-radius: var(--radius);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-left: 4px solid var(--primary);
+}
+
+/* Мобильная версия шапки */
+@media (max-width: 768px) {
+  .page-header-with-nav {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .header-left,
+  .header-center,
+  .header-right {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .header-left {
+    order: 1;
+  }
+  
+  .header-center {
+    order: 2;
+  }
+  
+  .header-right {
+    order: 3;
+  }
+  
+  .btn-home {
+    padding: 0.7rem 1.2rem;
+    font-size: 0.95rem;
+  }
+  
+  .user-greeting {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header-with-nav {
+    margin-bottom: 2rem;
+  }
+  
+  .header-center h2 {
+    font-size: 1.5rem;
+  }
+  
+  .btn-home {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .auth-header {
+    text-align: center;
+  }
+  
+  .btn-home-small {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Кнопка в модальном окне создания заявки */
+.modal-header .btn-home-modal {
+  position: absolute;
+  top: 50%;
+  left: 1.5rem;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.modal-header .btn-home-modal:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-50%) scale(1.05);
+}
+
+/* Breadcrumb навигация */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0.8rem 1.2rem;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--gray);
+  font-size: 0.9rem;
+}
+
+.breadcrumb-item.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.breadcrumb-separator {
+  color: var(--gray-light);
+}
+
+/* Плавающая кнопка "На главную" для мобильных */
+.floating-home-btn {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  background: var(--gradient-primary);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+  z-index: 100;
+  transition: var(--transition);
+  display: none;
+}
+
+.floating-home-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+@media (max-width: 768px) {
+  .floating-home-btn {
+    display: flex;
+  }
+  
+  /* Скрываем основную кнопку на мобильных, если есть плавающая */
+  .page-header-with-nav .btn-home {
+    display: none;
+  }
+}
+
+/* Анимация появления кнопки */
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.btn-home {
+  animation: slideInRight 0.5s ease-out;
+}
+
+/* Дополнительные варианты кнопки */
+.btn-home-secondary {
+  background: var(--light);
+  color: var(--dark);
+  box-shadow: none;
+}
+
+.btn-home-secondary:hover {
+  background: var(--gray-light);
+  color: var(--dark);
+}
+
+.btn-home-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+}
+
+.btn-home-outline:hover {
+  background: var(--primary);
+  color: var(--white);
+}
+
+/* Индикатор текущей страницы */
+.current-page-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.5rem 1rem;
+  background: var(--gradient-primary);
+  color: var(--white);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-left: 1rem;
 }
